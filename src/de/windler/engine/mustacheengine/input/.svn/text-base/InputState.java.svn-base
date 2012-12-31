@@ -1,0 +1,75 @@
+package de.jawi.engine.mustacheengine.input;
+
+import de.jawi.engine.mustacheengine.game.engine.GameTime;
+
+/**
+ * Interface für einen InputState
+ * 
+ * @author nw,mj
+ * 
+ */
+public class InputState {
+
+	private int currentValue = 0;
+	private int previousValue = 0;
+	private long pressedTime = 0;
+
+	/**
+	 * Gibt an, ob der Input gerade geklickt wurde
+	 * 
+	 * @return clicked
+	 */
+	public boolean justPressed() {
+		return (previousValue == 0 && currentValue == 1);
+	}
+
+	/**
+	 * Gibt an, ob der Input losgelassen wurde
+	 * 
+	 * @return released
+	 */
+	public boolean justReleased() {
+		return (previousValue == 1 && currentValue == 0);
+	}
+
+	/**
+	 * Gibt an, ob der Input geklickt ist
+	 * 
+	 * @return clicked
+	 */
+	public boolean pressed() {
+		return (previousValue == 1 && currentValue == 1);
+	}
+
+	/**
+	 * Gibt die Zeit eines InputEvents zurück
+	 * 
+	 * @return Zeit in ms
+	 */
+	public long pressedTime() {
+		return pressedTime;
+	}
+
+	/**
+	 * Updatet den Input-State
+	 */
+	public void update(GameTime gameTime, int value) {
+		previousValue = currentValue;
+		currentValue = value;
+		pressedTime += gameTime.getElapsedTime();
+
+		if (value > 0 && previousValue == 0) {
+			pressedTime = 0;
+		}
+	}
+
+	/**
+	 * gibt den letzten Input-Wert zurück
+	 * 
+	 * @return
+	 */
+	protected int getPreviousValue() {
+		return previousValue;
+	}
+
+}

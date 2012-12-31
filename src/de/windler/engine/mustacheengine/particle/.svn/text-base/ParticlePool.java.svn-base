@@ -1,0 +1,21 @@
+package de.jawi.engine.mustacheengine.particle;
+
+import de.jawi.engine.mustacheengine.pool.ObjectPool;
+
+public class ParticlePool extends ObjectPool<Particle> {
+
+	public ParticlePool() {
+		super(1000, 10);
+	}
+
+	@Override
+	protected Particle onHandleAllocatePoolItems() {
+		return new Particle();
+	}
+
+	@Override
+	protected void onHandleRecyclePoolObject(Particle object) {
+		object.recycle();
+	}
+
+}

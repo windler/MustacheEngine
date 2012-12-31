@@ -1,0 +1,5 @@
+package de.jawi.engine.mustacheengine.game.texture;
+
+public enum TexturePersistence {
+	NEVER_UNLOAD, UNLOAD_ON_POP
+}

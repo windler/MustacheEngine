@@ -1,0 +1,112 @@
+package de.jawi.engine.FiniteStateMachine;
+
+import android.graphics.Point;
+import de.jawi.engine.mustacheengine.game.Animation.AnimationObject;
+import de.jawi.engine.mustacheengine.game.Bitmap.GameBitmap;
+import de.jawi.engine.mustacheengine.game.font.Font;
+import de.jawi.engine.mustacheengine.game.sprite.SpriteBatch;
+
+public class Button {
+
+	private String text;
+	private AnimationObject aniObj;
+	private String key;
+	private Font font;
+	private int fontSize;
+	private Point fontPos;
+	private int layerNr;
+
+	/**
+	 * Button vom InputManager
+	 * 
+	 * @param label
+	 * @param font
+	 * @param size
+	 * @param bmp
+	 * @param
+	 */
+	public Button(String label, Font font, int size, int layerNr, GameBitmap bmp) {
+		text = label;
+		this.font = font;
+		fontSize = size;
+		aniObj = new AnimationObject(bmp);
+		this.layerNr = layerNr;
+
+		key = "btn:" + aniObj.hashCode();
+
+		calculateFontPosition();
+	}
+
+	private void calculateFontPosition() {
+		int width = 0;
+
+		if (font != null) {
+			for (char c : text.toCharArray()) {
+				width += font.getCharacter(c).getCharWidth();
+			}
+
+			width *= fontSize;
+
+			int midX = aniObj.getStartPoint().x + (aniObj.getWidth() / 2);
+			int midY = aniObj.getStartPoint().y + (aniObj.getHeight() / 2);
+
+			fontPos = new Point(midX - (width / 2), midY - (fontSize / 2));
+		} else {
+			fontPos = new Point(0, 0);
+		}
+	}
+
+	/**
+	 * Startpunkt des Buttons
+	 * 
+	 * @return
+	 */
+	public Point getStartPoint() {
+		return aniObj.getStartPoint();
+	}
+
+	/**
+	 * Endpunkt des Button
+	 * 
+	 * @return
+	 */
+	public Point getEndPoint() {
+		return new Point(getStartPoint().x + aniObj.getWidth(),
+				getStartPoint().y + aniObj.getHeight());
+	}
+
+	/**
+	 * liefert den Key des Button zurück (für den InputManager)
+	 * 
+	 * @return
+	 */
+	public String getKey() {
+		return key;
+	}
+
+	/**
+	 * Gibt die Nr des Layers zurück
+	 * 
+	 * @return
+	 */
+	public int getLayerNr() {
+		return layerNr;
+	}
+
+	/**
+	 * Zeichnet den Button
+	 * 
+	 * @param gl
+	 */
+	public void draw(SpriteBatch batch) {
+		aniObj.draw(batch);
+		batch.drawText(text, font.getName(), fontPos.x, fontPos.y, fontSize);
+	}
+
+	public void update() {
+		if (fontPos.equals(0, 0)) {
+			calculateFontPosition();
+		}
+	}
+
+}

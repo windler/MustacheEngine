@@ -1,0 +1,16 @@
+package de.jawi.engine.mustacheengine.game.debug;
+
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+/**
+ * Schaltet den DebugModus bei GameScreens ein
+ * 
+ * @author windler
+ * 
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+public @interface Debug {
+}

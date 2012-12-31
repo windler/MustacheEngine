@@ -1,0 +1,35 @@
+package de.jawi.engine.mustacheengine.game.engine;
+
+/**
+ * Speichert die ErstellZeit und gibt Informationen über die verstrichene Zeitzurück
+ * 
+ * @author windler
+ *
+ */
+public class GameTime {
+	
+	private long lastTime;
+	
+	public GameTime()
+	{
+		lastTime = System.currentTimeMillis();
+	}
+	
+	/**
+	 * Gibt die Zeit zurück, die seit dem letzten Aufruf von Update vergangen ist
+	 * @return verstrichene Zeit
+	 */
+	public long getElapsedTime() {
+		long time = System.currentTimeMillis();
+		return time - lastTime ;
+	}
+	
+	/**
+	 * Speichert die aktuelle Zeit als letzte Zeit
+	 */
+	public void update() {
+		lastTime = System.currentTimeMillis();
+	}
+	
+		
+}

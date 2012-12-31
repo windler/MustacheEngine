@@ -1,0 +1,134 @@
+package de.jawi.engine.mustacheengine.util;
+
+import android.graphics.Point;
+
+/**
+ * Vector für die GameEngine. Kann Operatoren +, - und *
+ * 
+ * @author windler
+ * 
+ */
+public class Vector2D {
+
+	private float x;
+	private float y;
+	private Point point;
+
+	/**
+	 * Erstellt einen Nullvektor
+	 */
+	public Vector2D() {
+		this(0,0);
+	}
+
+	/**
+	 * Erstellt einen (Orts-)Vektor mit den angegeben Koordinaten
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public Vector2D(float x, float y) {
+		this.x = x;
+		this.y = y;
+		point = new Point(0, 0);
+	}
+
+	/**
+	 * Erstellt einen neuen Nullvektor und gibt diesen zurück
+	 * 
+	 * @return
+	 */
+	public static Vector2D createNullVector() {
+		return new Vector2D();
+	}
+
+	/**
+	 * OPERATOREM
+	 */
+
+	/**
+	 * Addiert ein Paar(x,y)
+	 * 
+	 * @return
+	 */
+	public void add(float otherX, float otherY) {
+		x += otherX;
+		y += otherY;
+	}
+
+	/**
+	 * Subtrahiert ein Paar(x,y)
+	 * 
+	 * @return
+	 */
+	public void sub(float otherX, float otherY) {
+		x -= otherX;
+		y -= otherY;
+	}
+
+	/**
+	 * Multipliziert ein Paar(x,y)
+	 * 
+	 * @param other
+	 * @return
+	 */
+	public void mul(float otherX, float otherY) {
+		x *= otherX;
+		y *= otherY;
+	}
+
+	/**
+	 * Dividiert ein Paar(x,y)
+	 * 
+	 * @param other
+	 * @return
+	 */
+	public void div(float otherX, float otherY) {
+		x /= otherX;
+		y /= otherY;
+	}
+
+	/**
+	 * EIGENSCHAFTEN
+	 */
+
+	/**
+	 * Gibt die Länge des Vector zurück
+	 * 
+	 * @return
+	 */
+	public float getVectorLength() {
+		return (float) Math.sqrt((x * x) + (y * y));
+	}
+
+	/**
+	 * Erzeugt ein Point-Objekt anhand des Vectors
+	 * 
+	 * @return
+	 */
+	public Point getPoint() {
+		point.set((int) x, (int) y);
+		return point;
+	}
+
+	/**
+	 * Getter/Setter
+	 */
+
+	public float getY() {
+		return y;
+	}
+
+	public void setY(float y) {
+		this.y = y;
+	}
+
+	public float getX() {
+		return x;
+	}
+
+	public void setX(float x) {
+		this.x = x;
+	}
+
+}

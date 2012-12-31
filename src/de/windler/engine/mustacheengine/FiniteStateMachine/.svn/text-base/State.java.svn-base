@@ -1,0 +1,33 @@
+package de.jawi.engine.FiniteStateMachine;
+
+/**
+ * Abstrakte Klasse für einen State
+ * 
+ * @author nw,mj
+ * 
+ */
+
+public abstract class State {
+
+	/**
+	 * wird aufgerufen, wenn in den State übergegangen wird
+	 */
+	public abstract void onEnter();
+
+	/**
+	 * wird aufgerufen, wenn der State verlassen wird
+	 */
+	public abstract void onExit();
+
+	/**
+	 * update-Methode mit übergebenen Actor und FiniteStateMachine. Behandelt
+	 * das Verhalten des States und ändert den State des Actors wenn nötig
+	 * 
+	 * @param act
+	 *            Actor
+	 * @param fsm
+	 *            FiniteStateMachine
+	 */
+	public abstract void update(Actor act, FiniteStateMachine fsm);
+
+}

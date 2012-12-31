@@ -1,0 +1,49 @@
+10
+
+dir
+0
+https://subversion.assembla.com/svn/jawigame/AndroidGame/src/de/windler
+https://subversion.assembla.com/svn/jawigame
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+6e6c52be-5264-48db-bc25-4e996feb4f03
+
+engine
+dir
+
+
+
+add
+
+game
+dir
+
+
+
+add
+
+test
+dir
+
+
+
+add
+

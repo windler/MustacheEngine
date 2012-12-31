@@ -1,0 +1,93 @@
+package de.jawi.engine.mustacheengine.game.ui;
+
+import android.app.Activity;
+import android.opengl.GLSurfaceView;
+import android.os.Bundle;
+import de.jawi.engine.mustacheengine.game.engine.EngineOptions;
+import de.jawi.engine.mustacheengine.game.engine.GameEngine;
+import de.jawi.engine.mustacheengine.game.engine.GameEngineImpl;
+import de.jawi.engine.mustacheengine.game.engine.IGameEngine;
+import de.jawi.engine.mustacheengine.gamescreen.GameScreenManager;
+
+public abstract class BaseGameActivity extends Activity {
+
+	private GLSurfaceView glSurfaceView;
+	private GameEngine engine;
+
+	/**
+	 * wird aufgerufen, wenn die GameEngine das erste Mal benštigt wird
+	 * 
+	 * @return GameEngine der BaseActivity
+	 */
+	public abstract EngineOptions onCreateGameOptions();
+
+	/**
+	 * Wird aufgerufen, sobald der GameScreenManager der Activity erstellt wird
+	 * 
+	 * @param gsm
+	 *            GameScreenManager der Activity
+	 */
+	public abstract void onCreateGameScreenManager(GameScreenManager gsm);
+
+	/**
+	 * Hier kšnnen Fonts, sounds, Music etc geladen werden. Siehe:
+	 * {@code registerFont() }, {@code registerMusic()}, {@code registerSound()}
+	 * 
+	 * @param engine
+	 */
+	public abstract void onLoadResources(IGameEngine engine);
+
+	/**
+	 * Die ids der Textures, die beim Erstellen des Games bereits geladen werden
+	 * sollen. Diese kšnnen zur Laufzeit nicht entladen werden. Es empfiehlt
+	 * sich hier Texturen fŸr die ParticleEngine zu laden
+	 * 
+	 * @return
+	 */
+	public abstract int[] onLoadTextures();
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		engine = new GameEngineImpl(this, onCreateGameOptions());
+		engine.prepareSurface(this);
+		glSurfaceView = engine.createGLSurfaceView();
+		setContentView(glSurfaceView);
+		engine.createSoundManager(this);
+
+		int[] textIds = onLoadTextures();
+		if (textIds != null && textIds.length > 0) {
+			engine.loadTextures(onLoadTextures());
+		}
+
+		onLoadResources(engine);
+		onCreateGameScreenManager(engine.getGameScreenManager());
+
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		glSurfaceView.onPause();
+		engine.onPause();
+	}
+
+	@Override
+	public void onBackPressed() {
+		// nichts tun
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		glSurfaceView.onResume();
+		engine.onResume();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		engine.onDestroy();
+	}
+}

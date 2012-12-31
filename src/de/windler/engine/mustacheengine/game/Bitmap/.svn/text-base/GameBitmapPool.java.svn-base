@@ -1,0 +1,21 @@
+package de.jawi.engine.mustacheengine.game.Bitmap;
+
+import de.jawi.engine.mustacheengine.pool.ObjectPool;
+
+public class GameBitmapPool extends ObjectPool<GameBitmap> {
+
+	public GameBitmapPool(int size, int growth) {
+		super(size, growth);
+	}
+
+	@Override
+	protected GameBitmap onHandleAllocatePoolItems() {
+		return new GameBitmap();
+	}
+
+	@Override
+	protected void onHandleRecyclePoolObject(GameBitmap object) {
+		object.recycle();
+	}
+
+}

@@ -1,0 +1,83 @@
+package de.jawi.engine.mustacheengine.Layer;
+
+import de.jawi.engine.mustacheengine.game.Color.Color;
+
+public abstract class LayerAnimation {
+
+	private long elapsedTime = 0;
+	private long duration = 0;
+	private float rotation = 0;
+	private float scale = 1;
+	private Color color = Color.normal();
+
+	public LayerAnimation(int duration) {
+		this.duration = duration;
+	}
+
+	/**
+	 * Gibt die Laufzeit der Animation zurück
+	 * 
+	 * @return
+	 */
+	protected long getDuration() {
+		return duration;
+	}
+
+	protected void setDuration(int duration) {
+		this.duration = duration;
+	}
+
+	/**
+	 * Updatet die Animation
+	 */
+	public abstract void update();
+
+	/**
+	 * Ist die Animation zuende?
+	 * 
+	 * @return
+	 */
+	public abstract boolean finished();
+
+	/**
+	 * liefert die verstrichene Zeit
+	 * 
+	 * @return
+	 */
+	protected long getElapsedTime() {
+		return elapsedTime;
+	}
+
+	/**
+	 * Setzt die elapsed Time auf den Wert von ms
+	 * 
+	 * @param ms
+	 */
+	protected void setElapsedTime(long ms) {
+		elapsedTime = ms;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public float getScale() {
+		return scale;
+	}
+
+	public void setScale(float scale) {
+		this.scale = scale;
+	}
+
+	public float getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
+	}
+}

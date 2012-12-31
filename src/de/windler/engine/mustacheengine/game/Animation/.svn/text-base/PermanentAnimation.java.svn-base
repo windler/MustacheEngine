@@ -1,0 +1,44 @@
+package de.jawi.engine.mustacheengine.game.Animation;
+
+import de.jawi.engine.mustacheengine.game.Bitmap.GameBitmap;
+import de.jawi.engine.mustacheengine.game.sprite.SpriteBatch;
+
+/**
+ * Erstellt eine Animation, dessen Effekt dauerhaft bleibt, bis sie entfernt
+ * wird
+ * 
+ * @author windler
+ * 
+ */
+public abstract class PermanentAnimation {
+
+	private long elapsedTime;
+
+	/**
+	 * Zecihnet den aktuellen Zustand der Animation
+	 * 
+	 * @param gl
+	 * @param bmp
+	 * @param position
+	 */
+	public abstract void draw(SpriteBatch batch, GameBitmap bmp);
+
+	/**
+	 * Updatet die Animation
+	 */
+	public abstract void update();
+
+	/**
+	 * liefert die verstrichene Zeit
+	 * 
+	 * @return
+	 */
+	protected long getElapsedTime() {
+		return elapsedTime;
+	}
+
+	protected void setElapsedTime(long elapsedTime) {
+		this.elapsedTime = elapsedTime;
+	}
+
+}

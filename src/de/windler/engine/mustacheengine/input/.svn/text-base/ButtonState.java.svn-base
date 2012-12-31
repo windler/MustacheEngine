@@ -1,0 +1,25 @@
+package de.jawi.engine.mustacheengine.input;
+
+
+/**
+ * Hält die Button ID des InputState
+ * @author nw,mj
+ *
+ */
+public class ButtonState extends InputState{
+	
+	private int btnId = 0;
+	
+	public ButtonState(int id){
+		btnId = id;
+	}
+
+	public void setBtnId(int btnId) {
+		this.btnId = btnId;
+	}
+
+	public int getBtnId() {
+		return btnId;
+	}
+
+}

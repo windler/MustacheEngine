@@ -1,0 +1,86 @@
+package de.jawi.engine.mustacheengine.pool;
+
+import java.util.Stack;
+
+public abstract class ObjectPool<T> {
+
+	private Stack<T> poolObjects;
+	private int growOnEmpty;
+
+	/**
+	 * Erzeugt ein ObjectPool ohne Objekte
+	 */
+	public ObjectPool() {
+		this(0, 1);
+	}
+
+	/**
+	 * Erzeugt ein ObjectPool mit <poolSize> Elementen
+	 * 
+	 * @param poolSize
+	 *            Die Startgröße des Pools
+	 * @param grow
+	 *            Wenn neue Objekte erzeugt werden müssen: Wie viele neuen
+	 *            sollen hinzugefügt werden?
+	 */
+	public ObjectPool(int poolSize, int grow) {
+		poolObjects = new Stack<T>();
+		allocatePoolItems(poolSize);
+		growOnEmpty = grow;
+	}
+
+	/**
+	 * Fügt weitere PoolObjekte auf den Stack. Nutzt
+	 * {@code onHandleAllocatePoolItems()}
+	 * 
+	 * @param count
+	 *            Anzahl der Objete, die erzeugt werden
+	 */
+	public void allocatePoolItems(int count) {
+		for (int i = count; i > 0; i--) {
+			poolObjects.push(onHandleAllocatePoolItems());
+		}
+	}
+
+	/**
+	 * Objekt, das beim Erzeugen neuer PoolObjekte auf den Stack gelegt werden
+	 * soll (initial PoolObjects)
+	 * 
+	 * @return
+	 */
+	protected abstract T onHandleAllocatePoolItems();
+
+	/**
+	 * Gibt das oberste Objekt aus dem Pool zurück
+	 * 
+	 * @return
+	 */
+	public T getPoolItem() {
+		if (poolObjects.isEmpty()) {
+			allocatePoolItems(growOnEmpty);
+		}
+
+		return poolObjects.pop();
+	}
+
+	/**
+	 * Recyclet das Objekt und legt es auf den Stack. Ruft
+	 * {@code onHandleRecyclePoolObject()} auf
+	 * 
+	 * @param object
+	 *            das zu recyclende Objekt
+	 */
+	public void recyclePoolObject(T object) {
+		onHandleRecyclePoolObject(object);
+		poolObjects.push(object);
+	}
+
+	/**
+	 * Was soll mit den Objekten beim recycling passieren? Standardwerte setzen?
+	 * 
+	 * @param object
+	 *            das zu recyclende Objekt
+	 */
+	protected abstract void onHandleRecyclePoolObject(T object);
+
+}

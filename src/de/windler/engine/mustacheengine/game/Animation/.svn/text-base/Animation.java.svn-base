@@ -1,0 +1,73 @@
+package de.jawi.engine.mustacheengine.game.Animation;
+
+import de.jawi.engine.mustacheengine.game.Bitmap.GameBitmap;
+import de.jawi.engine.mustacheengine.game.sprite.SpriteBatch;
+
+/**
+ * Abstrakte Klasse für Animationen
+ * 
+ * @author windler
+ * 
+ */
+public abstract class Animation {
+
+	private long elapsedTime = 0;
+	private long duration = 0;
+
+	public Animation(int duration) {
+		this.duration = duration;
+	}
+
+	/**
+	 * Gibt die Laufzeit der Animation zurück
+	 * 
+	 * @return
+	 */
+	protected long getDuration() {
+		return duration;
+	}
+
+	protected void setDuration(int duration) {
+		this.duration = duration;
+	}
+
+	/**
+	 * Zecihnet den aktuellen Zustand der Animation
+	 * 
+	 * @param gl
+	 * @param bmp
+	 * @param position
+	 */
+	public abstract void draw(SpriteBatch batch, GameBitmap bmp);
+
+	/**
+	 * Updatet die Animation
+	 */
+	public abstract void update();
+
+	/**
+	 * Ist die Animation zuende?
+	 * 
+	 * @return
+	 */
+	public abstract boolean finished();
+
+	/**
+	 * liefert die verstrichene Zeit
+	 * 
+	 * @return
+	 */
+	protected long getElapsedTime() {
+		return elapsedTime;
+	}
+
+	/**
+	 * Setzt die elapsed Time auf den Wert von ms
+	 * 
+	 * @param ms
+	 */
+	protected void setElapsedTime(long ms) {
+		elapsedTime = ms;
+	}
+
+}

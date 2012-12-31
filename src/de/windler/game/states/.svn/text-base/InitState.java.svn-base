@@ -1,0 +1,41 @@
+package de.jawi.game.states;
+
+import de.jawi.engine.FiniteStateMachine.Actor;
+import de.jawi.engine.FiniteStateMachine.FiniteStateMachine;
+import de.jawi.engine.FiniteStateMachine.State;
+
+public class InitState extends State {
+
+	private static InitState state = null;
+
+	/**
+	 * die Instanz des InitialStates
+	 * 
+	 * @return
+	 */
+	public static InitState instance() {
+		if (state == null) {
+			state = new InitState();
+		}
+		return state;
+	}
+
+	@Override
+	public void onEnter() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onExit() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void update(Actor act, FiniteStateMachine fsm) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

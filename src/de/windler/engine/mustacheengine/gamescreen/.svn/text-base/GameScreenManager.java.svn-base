@@ -1,0 +1,149 @@
+package de.jawi.engine.mustacheengine.gamescreen;
+
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Stack;
+
+import android.graphics.Point;
+import android.util.Log;
+import de.jawi.engine.mustacheengine.game.debug.Debug;
+import de.jawi.engine.mustacheengine.game.engine.GameEngine;
+import de.jawi.engine.mustacheengine.game.engine.IGameEngine;
+import de.jawi.engine.mustacheengine.game.sprite.SpriteBatch;
+import de.jawi.engine.mustacheengine.game.texture.GameScreenTextures;
+import de.jawi.engine.mustacheengine.input.IInputListener;
+import de.jawi.engine.mustacheengine.input.InputManager;
+
+/**
+ * Kümmert sich um die GameScreens. Intern: ein Stack, der alle GameScreens
+ * enthält. Der oberste GameScreen wird benutzt. Muss in der Game-Loop genommen
+ * werden!
+ * 
+ * @author windler
+ * 
+ */
+public class GameScreenManager implements IInputListener {
+
+	private Stack<GameScreen> screens;
+
+	private Dictionary<GameScreen, GameScreenTextures> gameScreenTextures;
+
+	private boolean debug = false;
+	private int frames = 0;
+	private long elapsedTime = 0; // vergangene Zeit seit letzten Frame
+	private InputManager inputManager;
+	private GameEngine engine;
+
+	public GameScreenManager(InputManager im, GameEngine eng) {
+		screens = new Stack<GameScreen>();
+		gameScreenTextures = new Hashtable<GameScreen, GameScreenTextures>();
+		inputManager = im;
+		inputManager.setInputListener(this);
+		engine = eng;
+	}
+
+	/**
+	 * legt einen neuen GameScreen auf den Stack
+	 * 
+	 * @param screen
+	 *            neuer GameScreen
+	 */
+	public void push(GameScreen screen) {
+		screens.push(screen);
+		GameScreenTextures textures = screen.onLoadTextures();
+		gameScreenTextures.put(screen, textures);
+		engine.loadTextures(textures.getIdsToLoad());
+		screen.onPrepareGameScreen();
+		checkDebug();
+	}
+
+	/**
+	 * die Gameengine des GSM
+	 */
+	public IGameEngine getEngine() {
+		return engine;
+	}
+
+	/**
+	 * Registriert im InputManager ein neues TochEvent
+	 * 
+	 * @param key
+	 * @param start
+	 * @param end
+	 */
+	public void registerTouchEvent(String key, Point start, Point end) {
+		inputManager.registerNewTouchState(key, start, end);
+	}
+
+	/**
+	 * Registriert im InputManager ein neues ButtonEvent
+	 * 
+	 * @param key
+	 * @param id
+	 *            ID des Button
+	 */
+	public void registerButtonEvent(String key, int id) {
+		inputManager.registerNewBtnState(key, id);
+	}
+
+	private void checkDebug() {
+		if (screens.lastElement().getClass().isAnnotationPresent(Debug.class)) {
+			debug = true;
+			elapsedTime = 0;
+			frames = 0;
+		} else {
+			debug = false;
+		}
+	}
+
+	/**
+	 * Entfernt den obersten GameScreen und gibt diesen zurück
+	 * 
+	 * @return oberster GameScreen
+	 */
+	public GameScreen pop() {
+		GameScreen gs = screens.pop();
+		GameScreenTextures textures = gameScreenTextures.get(gs);
+		engine.unloadTextures(textures.getIdsToUnload());
+		gameScreenTextures.remove(gs);
+		checkDebug();
+		return gs;
+	}
+
+	/**
+	 * Ruft die draw-Methode des obersten GameScreen auf
+	 * 
+	 * @param gameSpriteBatch
+	 * 
+	 * @param gl
+	 * @param gameTime
+	 */
+	public void drawTopGameScreen(SpriteBatch gameSpriteBatch) {
+		screens.lastElement().draw(gameSpriteBatch);
+	}
+
+	/**
+	 * updatet den obersten Gamescreen
+	 */
+	public void updateTopGameScreen() {
+		screens.lastElement().update();
+
+		if (debug) {
+			frames++;
+			elapsedTime += engine.getGameTime().getElapsedTime();
+			if (elapsedTime > 1000) {
+				Log.d("FPS", "-->" + frames);
+				frames = 0;
+				elapsedTime = 0;
+			}
+		}
+	}
+
+	/**
+	 * delegate für Input
+	 */
+	public void onInput(InputManager inputManager) {
+		screens.lastElement().inputProcessed(inputManager);
+	}
+
+}

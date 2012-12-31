@@ -1,0 +1,146 @@
+package de.jawi.engine.mustacheengine.game.engine;
+
+import android.content.Context;
+import de.jawi.engine.mustacheengine.game.Bitmap.GameBitmap;
+import de.jawi.engine.mustacheengine.game.font.Font;
+import de.jawi.engine.mustacheengine.gamescreen.GameScreenManager;
+import de.jawi.engine.mustacheengine.particle.ParticleEffect;
+
+public interface IGameEngine {
+
+	/**
+	 * liefert den Context der GameEngine
+	 * 
+	 * @return
+	 */
+	public Context getContext();
+
+	/**
+	 * Die GameTime der Engine
+	 * 
+	 * @return
+	 */
+	public GameTime getGameTime();
+
+	/**
+	 * GameScreenManager der Engine
+	 * 
+	 * @return
+	 */
+	public GameScreenManager getGameScreenManager();
+
+	/*******************
+	 * Textures
+	 ***************/
+
+	/**
+	 * Erzeugt ein Gamebitmap mit der Position (0,0). Kann auch bei der
+	 * ParticleEngine genutzt werden
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public GameBitmap getGameBitmapFromPool(int id);
+
+	/**
+	 * Erzeugt ein Gamebitmap mit der Position (0,0). Kann auch bei der
+	 * ParticleEngine genutzt werden
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public GameBitmap getGameBitmapFromPool(int id, int x, int y);
+	
+	/**
+	 * Recyclet das GameBitmap und fügt es wieder in den Pool
+	 * @param bmp
+	 */
+	public void recycleGameBitmap(GameBitmap bmp);
+
+	/**************
+	 * Display
+	 ********/
+
+	/**
+	 * Die Breite des Displays
+	 * 
+	 * @return
+	 */
+	public int getDisplayWidth();
+
+	/**
+	 * Die Höhe des Displays
+	 * 
+	 * @return
+	 */
+	public int getDisplayHeight();
+
+	/*****************
+	 * Sound
+	 *************/
+
+	/**
+	 * Spielt den gewünschten Sound ab
+	 * 
+	 * @param name
+	 */
+	public void playSound(String name);
+
+	/**
+	 * Spielt die Musik ab
+	 */
+	public void playMusic();
+
+	/**
+	 * Fügt dem Soundpool einen neuen Sound hinzu
+	 * 
+	 * @param name
+	 * @param id
+	 */
+	public void registerSound(String name, int id);
+
+	/**
+	 * fügt dem Soundmanager eine neue Musik hinzu
+	 * 
+	 * @param name
+	 * @param id
+	 */
+	public void registerMusic(String name, int id);
+
+	/**
+	 * Wechselt die Musik
+	 * 
+	 * @param name
+	 */
+	public void changeMusic(String name);
+
+	/***************
+	 * FONT
+	 *******/
+
+	/**
+	 * Registriert einen neuen Font
+	 * 
+	 * @param f
+	 *            Font
+	 * @param key
+	 *            Schlüssel
+	 */
+	public void registerFont(Font f);
+
+	/**
+	 * Liefert das passende Font-Objekt zurück
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public Font getFont(String key);
+
+	/**
+	 * Fügt einen neuen ParticleEffect hinzu
+	 * 
+	 * @param effect
+	 */
+	public void addParticleEffect(ParticleEffect effect);
+
+}

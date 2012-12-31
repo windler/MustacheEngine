@@ -1,0 +1,17 @@
+package de.jawi.engine.mustacheengine.input;
+
+/**
+ * Listener für Input vom InputManager
+ * 
+ * @author nw,mj
+ * 
+ */
+
+public interface IInputListener {
+
+	/**
+	 * Wird aufgerufen, sobald im InputManager ein Input bemerkt wird
+	 */
+	public void onInput(InputManager inputManager);
+
+}

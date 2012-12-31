@@ -1,0 +1,108 @@
+package de.jawi.engine.mustacheengine.gamescreen;
+
+import de.jawi.engine.FiniteStateMachine.Button;
+import de.jawi.engine.FiniteStateMachine.FiniteStateMachine;
+import de.jawi.engine.mustacheengine.game.engine.IGameEngine;
+import de.jawi.engine.mustacheengine.game.sprite.SpriteBatch;
+import de.jawi.engine.mustacheengine.game.texture.GameScreenTextures;
+import de.jawi.engine.mustacheengine.input.InputManager;
+
+/**
+ * Der aktuelle "Bildschirm" der gezeichnet werden soll
+ * 
+ * @author windler
+ * 
+ */
+public abstract class GameScreen {
+
+	private FiniteStateMachine fsm;
+	private GameScreenManager gsm;
+
+	public GameScreen(GameScreenManager gsm) {
+		fsm = new FiniteStateMachine();
+		this.gsm = gsm;
+	}
+
+	/**
+	 * Wird aufgerufen, nachdem der GameScreen gepuht wird und die Texturen
+	 * geladen wurden. Texturen nicht im Konstuktor verwenden!
+	 */
+	public abstract void onPrepareGameScreen();
+
+	/**
+	 * Logik fuer die Neuberechnung
+	 * 
+	 * @param gameTime
+	 *            gametime
+	 */
+	public abstract void update();
+
+	/**
+	 * Zeichenaufrufe fuer den Screen --> angestrebt sind 50 Aufrufe / s
+	 * @param gameSpriteBatch 
+	 * 
+	 * @param gl
+	 *            gl
+	 * @param gameTime
+	 *            gametime
+	 */
+	public abstract void draw(SpriteBatch gameSpriteBatch);
+
+	/**
+	 * Wird aufgerufen, wenn der InputManager ein Input bekommen hat
+	 * 
+	 * @param inputManager
+	 */
+	public abstract void inputProcessed(InputManager inputManager);
+
+	/**
+	 * Wird beim push eines GameScreen aufgerufen. Hier müssen alle Texturesn
+	 * geladen werden, die in dem GameScreen benötigt werden. Die Texturen
+	 * werden beim pop automatisch wieder entladen (außer die sind zum
+	 * permanenten laden geflagt)
+	 * 
+	 * @param gst
+	 */
+	public abstract GameScreenTextures onLoadTextures();
+
+	/**
+	 * FiniteStateMachine des GS
+	 * 
+	 * @return
+	 */
+	public FiniteStateMachine getFSM() {
+		return fsm;
+	}
+
+	/**
+	 * GameScreenManager des GS
+	 * 
+	 * @return
+	 */
+	public GameScreenManager getGSM() {
+		return gsm;
+	}
+
+	/**
+	 * die Engine des GSM
+	 * 
+	 * @return
+	 */
+	public IGameEngine getEngine() {
+		return gsm.getEngine();
+	}
+
+	public void addButton(Button btn) {
+		fsm.addButton(btn);
+		gsm.registerTouchEvent(btn.getKey(), btn.getStartPoint(),
+				btn.getEndPoint());
+	}
+
+	/**
+	 * NOCH NICHT IMPLEMENTIERT!
+	 */
+	public void removeButton() {
+		// TODO NOCH NICHt IMPLLEMENTIERT!
+	}
+
+}

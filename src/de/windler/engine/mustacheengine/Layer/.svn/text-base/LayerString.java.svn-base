@@ -1,0 +1,79 @@
+package de.jawi.engine.mustacheengine.Layer;
+
+import android.graphics.Point;
+import de.jawi.engine.mustacheengine.game.Color.Color;
+
+/**
+ * Container für die Strings, die in einer Ebene gezeichnet werden sollen
+ * 
+ * @author windler
+ * 
+ */
+public class LayerString {
+
+	private String text;
+	private String fontText;
+	private Point position;
+	private float fontSize;
+	private int textRotation;
+	private Color color;
+
+	public LayerString(String txt, String font, Point pos, float size,
+			int rotation, Color cl) {
+		setText(txt);
+		setFontText(font);
+		setPosition(pos);
+		setFontSize(size);
+		setTextRotation(rotation);
+		setColor(cl);
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public String getFontText() {
+		return fontText;
+	}
+
+	public void setFontText(String fontText) {
+		this.fontText = fontText;
+	}
+
+	public Point getPosition() {
+		return position;
+	}
+
+	public void setPosition(Point position) {
+		this.position = position;
+	}
+
+	public float getFontSize() {
+		return fontSize;
+	}
+
+	public void setFontSize(float fontSize) {
+		this.fontSize = fontSize;
+	}
+
+	public int getTextRotation() {
+		return textRotation;
+	}
+
+	public void setTextRotation(int textRotation) {
+		this.textRotation = textRotation;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+}

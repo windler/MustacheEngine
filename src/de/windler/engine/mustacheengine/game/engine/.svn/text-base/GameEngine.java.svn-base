@@ -1,0 +1,62 @@
+package de.jawi.engine.mustacheengine.game.engine;
+
+import javax.microedition.khronos.opengles.GL10;
+
+import android.app.Activity;
+import android.opengl.GLSurfaceView;
+import de.jawi.engine.mustacheengine.input.InputManager;
+import de.jawi.engine.mustacheengine.particle.ParticleEngine;
+
+public interface GameEngine extends IGameEngine {
+
+	/**
+	 * Lädt Texturen anhand der Ids
+	 * 
+	 * @param ids
+	 */
+	public void loadTextures(int[] ids);
+
+	/**
+	 * Entlädt die Texturen anhand der Ids
+	 * 
+	 * @param ids
+	 */
+	public void unloadTextures(int[] ids);
+
+	/**
+	 * Der InputManager der Engine
+	 */
+	public InputManager getInputManager();
+
+	/**
+	 * Die ParticleEngine der Engine
+	 * 
+	 * @return
+	 */
+	public ParticleEngine getParticleEngine();
+
+	/**
+	 * bereitet das Surface vor
+	 * 
+	 * @param act
+	 */
+	public void prepareSurface(Activity act);
+
+	/**
+	 * Erzeugt das GLSurfaceView der Engine und gibt dieses zurück
+	 */
+	public GLSurfaceView createGLSurfaceView();
+
+	/**
+	 * Erstellt den SoundManager der Engine
+	 * 
+	 * @param act
+	 */
+	public void createSoundManager(Activity act);
+
+	public void onPause();
+
+	public void onResume();
+
+	public void onDestroy();
+}

@@ -1,0 +1,83 @@
+package de.jawi.engine.mustacheengine.game.engine;
+
+import de.jawi.engine.mustacheengine.game.engine.policy.ResolutionPolicy;
+
+/**
+ * Die GameOptions der Engine
+ * 
+ * @author windler
+ * 
+ */
+public class EngineOptions {
+
+	private ResolutionPolicy gameResolutionPolicy;
+	private boolean isFullscreen;
+	private boolean isNoTitle;
+	private int gameWidth;
+	private int gameHeight;
+
+	/**
+	 * 
+	 * @param resolutionPolicy
+	 *            Auflšsungsverhalten der Engine
+	 * @param camera
+	 *            Kamera der Engine
+	 * @param fullscreen
+	 *            soll das Game Fullscreen sein?
+	 * @param noTitle
+	 *            soll die Titellesite ausgeblendet werden
+	 */
+	public EngineOptions(ResolutionPolicy resolutionPolicy, int width,
+			int height, boolean fullscreen, boolean noTitle) {
+		gameResolutionPolicy = resolutionPolicy;
+		gameWidth = width;
+		gameHeight = height;
+		isFullscreen = fullscreen;
+		isNoTitle = noTitle;
+	}
+
+	/**
+	 * Die ResolutionPolicy der Options
+	 * 
+	 * @return
+	 */
+	public ResolutionPolicy getResolutionPolicy() {
+		return gameResolutionPolicy;
+	}
+
+	/**
+	 * Die Breite des Spiels in Pixeln
+	 * 
+	 * @return
+	 */
+	public int getGameWidth() {
+		return gameWidth;
+	}
+
+	/**
+	 * Die Hšhe des Spiels in Pixeln
+	 * 
+	 * @return
+	 */
+	public int getGameHeight() {
+		return gameHeight;
+	}
+
+	/**
+	 * soll Fullscreen angefordert werden?
+	 * 
+	 * @return
+	 */
+	public boolean isFullscreen() {
+		return isFullscreen;
+	}
+
+	/**
+	 * soll die Titelleiste ausgeblendet werden?
+	 * 
+	 * @return
+	 */
+	public boolean isNoTitle() {
+		return isNoTitle;
+	}
+}

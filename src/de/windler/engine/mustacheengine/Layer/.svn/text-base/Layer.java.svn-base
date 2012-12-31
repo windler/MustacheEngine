@@ -1,0 +1,174 @@
+package de.jawi.engine.mustacheengine.Layer;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+import android.graphics.Point;
+import de.jawi.engine.FiniteStateMachine.Actor;
+import de.jawi.engine.FiniteStateMachine.Button;
+import de.jawi.engine.mustacheengine.game.Color.Color;
+import de.jawi.engine.mustacheengine.game.engine.IGameEngine;
+import de.jawi.engine.mustacheengine.game.sprite.SpriteBatch;
+
+/**
+ * Layer fürt den LayerManager. Hält den Zustand des Layer
+ * 
+ * @author windler
+ * 
+ */
+public class Layer implements Comparable<Layer> {
+	private List<Actor> actors;
+	private List<Button> btn;
+
+	private Queue<LayerAnimation> animations;
+	private Queue<LayerString> textToDraw;
+
+	private int layerNr;
+	private float rotation;
+	private float scale;
+	private Color color;
+
+	public Layer(int nr) {
+		actors = new ArrayList<Actor>();
+		btn = new ArrayList<Button>();
+		textToDraw = new LinkedList<LayerString>();
+		animations = new LinkedList<LayerAnimation>();
+
+		layerNr = nr;
+		rotation = 0;
+		scale = 1;
+		color = Color.normal();
+	}
+
+	/**
+	 * Fügt der Ebene einen Actor hinzu
+	 * 
+	 * @param a
+	 */
+	public void addActor(Actor a) {
+		actors.add(a);
+	}
+
+	/**
+	 * Fügt der Queue eine Animation hinzu
+	 * 
+	 * @param a
+	 */
+	public void addAnimation(LayerAnimation a) {
+		animations.add(a);
+	}
+
+	/**
+	 * Entfernt den Actor aus dem Layer
+	 * 
+	 * @param a
+	 */
+	public void removeActor(Actor a) {
+		actors.remove(a);
+	}
+
+	/**
+	 * Fügt dem Layer einen Button hinzu
+	 * 
+	 * @param bt
+	 */
+	public void addButton(Button bt) {
+		btn.add(bt);
+	}
+
+	/**
+	 * Entfernt einen Button aus dem Layer
+	 * 
+	 * @param bt
+	 */
+	public void removeButton(Button bt) {
+		btn.remove(bt);
+	}
+
+	/**
+	 * Sorgt dafür, dass der Text beim nächsten Aufruf von draw() gezeichnet
+	 * wird. Die Strings werden in einer Queue gehalten. Strings, die zuerst
+	 * hinzugefügt wurden, liegen unterhalb von Strings, die später zugefügt
+	 * wurden!
+	 * 
+	 * @param text
+	 * @param font
+	 * @param pos
+	 * @param size
+	 * @param rotation
+	 */
+	public void addText(String text, String font, Point pos, float size,
+			int rotation, Color cl) {
+		LayerString ls = new LayerString(text, font, pos, size, rotation, cl);
+		textToDraw.add(ls);
+	}
+
+	/**
+	 * Zeichnet die Ebene und alle Actors
+	 * 
+	 * @param gl
+	 * @param actor
+	 */
+	public void draw(SpriteBatch batch) {
+		batch.begin(rotation, scale, color);
+		// engine.changeSurface(rotation, scale, color);
+		for (Actor a : actors) {
+			a.draw(batch);
+		}
+		for (Button b : btn) {
+			b.draw(batch);
+		}
+
+		LayerString ls = null;
+		while ((ls = textToDraw.poll()) != null) {
+			batch.drawText(ls.getText(),ls.getFontText(), ls.getPosition().x, ls.getPosition().y, ls.getFontSize());
+		}
+		batch.end();
+	}
+
+	/**
+	 * Updatet die Animationen
+	 * 
+	 * @param gt
+	 * @param context
+	 */
+	public void update(IGameEngine engine) {
+		if (!animations.isEmpty()) {
+			LayerAnimation animation = animations.element();
+
+			animation.setElapsedTime(animation.getElapsedTime()
+					+ engine.getGameTime().getElapsedTime());
+
+			animation.update();
+
+			rotation = animation.getRotation();
+			scale = animation.getScale();
+			color = animation.getColor();
+
+			if (animation.finished()) {
+				animations.remove();
+			}
+		}
+	}
+
+	/**
+	 * Gibt die Nr des Layers zurück
+	 * 
+	 * @return
+	 */
+	public int getLayerNr() {
+		return layerNr;
+	}
+
+	public int compareTo(Layer another) {
+		int result = 0;
+		if (getLayerNr() < another.getLayerNr()) {
+			result = -1;
+		} else if (getLayerNr() > another.getLayerNr()) {
+			result = 1;
+		}
+		return result;
+	}
+}

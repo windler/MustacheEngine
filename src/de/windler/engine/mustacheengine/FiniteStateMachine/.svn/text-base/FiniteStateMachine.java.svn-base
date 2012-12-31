@@ -1,0 +1,127 @@
+package de.jawi.engine.FiniteStateMachine;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.graphics.Point;
+import android.util.Log;
+import de.jawi.engine.mustacheengine.Layer.LayerAnimation;
+import de.jawi.engine.mustacheengine.Layer.LayerManager;
+import de.jawi.engine.mustacheengine.game.Color.Color;
+import de.jawi.engine.mustacheengine.game.engine.IGameEngine;
+import de.jawi.engine.mustacheengine.game.sprite.SpriteBatch;
+
+public class FiniteStateMachine {
+
+	private List<Actor> actList;
+	private List<Button> btList;
+	private LayerManager lm;
+
+	/**
+	 * erzeugt eine neue FiniteStateMachine
+	 */
+	public FiniteStateMachine() {
+		actList = new ArrayList<Actor>();
+		btList = new ArrayList<Button>();
+		lm = new LayerManager();
+	}
+
+	/**
+	 * fuegt einen neuen Actor der Liste hinzu und uebergibt diesen an den
+	 * LayerManager
+	 * 
+	 * @param act
+	 *            Actor
+	 */
+	public void addActor(Actor act) {
+		actList.add(act);
+		lm.registerActor(act);
+	}
+
+	/**
+	 * FŸgt der FSM und dem LayerManager einen Button hinzu
+	 * 
+	 * @param btn
+	 */
+	public void addButton(Button btn) {
+		btList.add(btn);
+		lm.registerButton(btn);
+	}
+
+	/**
+	 * wechselt den State eines Actors
+	 * 
+	 * @param act
+	 *            Actor
+	 * @param nextState
+	 *            nächster State
+	 */
+	public void changeState(Actor act, State nextState) {
+		act.changeState(nextState);
+	}
+
+	/**
+	 * recyclet den Actor (loescht den Actor aus der Liste)
+	 * 
+	 * @param act
+	 *            der zu recyclende Actor
+	 */
+	public void recycleActor(Actor act) {
+		actList.remove(act);
+		Log.d("FSM", "Actor " + act + " gelöscht!");
+		act = null;
+	}
+
+	/**
+	 * ruft bei allen Actors die update()-Methode auf
+	 * 
+	 * @param time
+	 * @param cont
+	 */
+	public void update(IGameEngine engine) {
+		lm.update(engine);
+		for (Actor a : actList) {
+			a.update(this, engine);
+		}
+
+		for (Button b : btList) {
+			b.update();
+		}
+	}
+
+	/**
+	 * FŸgt einem Layer eine Animation hinzu
+	 * 
+	 * @param ani
+	 * @param layerNr
+	 */
+	public void addLayerAnimation(LayerAnimation ani, int layerNr) {
+		lm.addAnimation(ani, layerNr);
+	}
+
+	/**
+	 * FŸgt dem Layer einen Text zum Zeichnen hinzu. Wird aufgerufen, sobald
+	 * draw() aufgerufen wird. Anschlie§end ist das Objekt weg!
+	 * 
+	 * @param text
+	 * @param font
+	 * @param pos
+	 * @param size
+	 * @param rotation
+	 * @param layerNr
+	 */
+	public void addTextToLayer(String text, String font, Point pos, float size,
+			int rotation, Color cl, int layerNr) {
+		lm.addText(text, font, pos, size, rotation, cl, layerNr);
+	}
+
+	/**
+	 * ruft draw() des LayerManagers auf
+	 * 
+	 * @param gl
+	 */
+	public void draw(SpriteBatch batch) {
+		lm.draw(batch);
+	}
+
+}

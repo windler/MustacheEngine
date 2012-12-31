@@ -1,0 +1,44 @@
+package de.jawi.engine.mustacheengine.game.texture;
+
+import android.graphics.Bitmap;
+
+public class Texture {
+
+	private int textureWidth;
+	private int textureHeight;
+	private Bitmap potBmp;
+	private int id;
+	
+	public Texture(int id) {
+		this.id = id;
+	}
+
+	public int getTextureWidth() {
+		return textureWidth;
+	}
+
+	public void setTextureWidth(int textureWidth) {
+		this.textureWidth = textureWidth;
+	}
+
+	public int getTextureHeight() {
+		return textureHeight;
+	}
+
+	public void setTextureHeight(int textureHeight) {
+		this.textureHeight = textureHeight;
+	}
+
+	public Bitmap getPotBmp() {
+		return potBmp;
+	}
+
+	public void setPotBmp(Bitmap potBmp) {
+		this.potBmp = potBmp;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+}

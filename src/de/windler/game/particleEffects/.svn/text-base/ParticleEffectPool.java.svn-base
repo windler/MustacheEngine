@@ -1,0 +1,24 @@
+package de.jawi.game.particleEffects;
+
+import de.jawi.engine.mustacheengine.pool.ObjectPool;
+import de.jawi.engine.mustacheengine.util.Vector2D;
+
+public class ParticleEffectPool extends
+		ObjectPool<StarsAndDiamondsParticleEffect> {
+
+	public ParticleEffectPool() {
+		super(10, 5);
+	}
+
+	@Override
+	protected StarsAndDiamondsParticleEffect onHandleAllocatePoolItems() {
+		return new StarsAndDiamondsParticleEffect(new Vector2D(200, 200));
+	}
+
+	@Override
+	protected void onHandleRecyclePoolObject(
+			StarsAndDiamondsParticleEffect object) {
+
+	}
+
+}

@@ -1,0 +1,72 @@
+package de.jawi.engine.mustacheengine.game.texture;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class GameScreenTextures {
+
+	private List<BufferedTexture> bufferedTextures;
+
+	public GameScreenTextures() {
+		bufferedTextures = new ArrayList<BufferedTexture>();
+	}
+
+	/**
+	 * Fügt eine Textur hinzu
+	 * 
+	 * @param id
+	 * @param persistence
+	 */
+	public void addTexture(int id, TexturePersistence persistence) {
+		bufferedTextures.add(new BufferedTexture(id, persistence));
+	}
+
+	/**
+	 * Fügt eine Textur hinzu
+	 * 
+	 * @param id
+	 */
+	public void addTexture(int id) {
+		addTexture(id, TexturePersistence.UNLOAD_ON_POP);
+	}
+
+	/**
+	 * Gibt die ids zurück, die geladenw erden sollen
+	 * 
+	 * @return
+	 */
+	public int[] getIdsToLoad() {
+		int[] ids = new int[bufferedTextures.size()];
+
+		int i = 0;
+		for (BufferedTexture b : bufferedTextures) {
+			ids[i] = b.getId();
+			i++;
+		}
+
+		return ids;
+	}
+
+	/**
+	 * Gibt die ids zurück, die entladen werden sollen
+	 * 
+	 * @return
+	 */
+	public int[] getIdsToUnload() {
+		List<Integer> ids = new ArrayList<Integer>();
+
+		for (BufferedTexture b : bufferedTextures) {
+			if (b.getPersistence().equals(TexturePersistence.UNLOAD_ON_POP)) {
+				ids.add(b.getId());
+			}
+		}
+		int[] idsToUnload = new int[ids.size()];
+
+		int j = 0;
+		for (int id : ids) {
+			idsToUnload[j] = id;
+			j++;
+		}
+		return idsToUnload;
+	}
+}

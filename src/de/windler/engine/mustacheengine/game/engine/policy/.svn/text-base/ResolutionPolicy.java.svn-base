@@ -1,0 +1,5 @@
+package de.jawi.engine.mustacheengine.game.engine.policy;
+
+public enum ResolutionPolicy {
+	FILL;
+}

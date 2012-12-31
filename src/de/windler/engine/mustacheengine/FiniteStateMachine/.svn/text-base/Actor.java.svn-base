@@ -1,0 +1,119 @@
+package de.jawi.engine.FiniteStateMachine;
+
+import android.graphics.Point;
+import de.jawi.engine.mustacheengine.game.Animation.AnimationObject;
+import de.jawi.engine.mustacheengine.game.Bitmap.GameBitmap;
+import de.jawi.engine.mustacheengine.game.engine.IGameEngine;
+import de.jawi.engine.mustacheengine.game.sprite.SpriteBatch;
+
+public class Actor {
+
+	private State curState = null;
+	private AnimationObject ani = null;
+	private int layer;
+
+	/**
+	 * erzeugt einen Actor mit Initialstate
+	 * 
+	 * @param initState
+	 *            InitialState
+	 * @param layer
+	 *            layerNR
+	 * @param bmps
+	 *            GameBitmap
+	 */
+	public Actor(State initState, int layer, GameBitmap... bmps) {
+		this.layer = layer;
+		ani = new AnimationObject(bmps);
+		curState = initState;
+		curState.onEnter();
+	}
+
+	/**
+	 * erzeugt einen Actor mit Initialstate und layerNR = 1!
+	 * 
+	 * @param initState
+	 * @param bmps
+	 */
+	public Actor(State initState, GameBitmap... bmps) {
+		this(initState, 1, bmps);
+	}
+
+	/**
+	 * gibt die LayerNr zurück
+	 * 
+	 * @return layerNr
+	 */
+	public int getLayerNr() {
+		return layer;
+	}
+
+	/**
+	 * wechselt den aktuellen State des Actors
+	 * 
+	 * @param nextState
+	 *            der naechste State
+	 */
+	public void changeState(State nextState) {
+		curState.onExit();
+		curState = nextState;
+		curState.onEnter();
+	}
+
+	/**
+	 * gibt den Start-Punkt des Actor Obj. zurueck
+	 * 
+	 * @return start-Point, sonst null
+	 */
+	public Point getStartPoint() {
+		Point start = null;
+		if (ani != null) {
+			start = new Point();
+			start.x = ani.getStartPoint().x;
+			start.y = ani.getStartPoint().y;
+		}
+		return start;
+	}
+
+	/**
+	 * gibt die Breite des Actors zurueck
+	 * 
+	 * @return
+	 */
+	public int getWidth() {
+		return ani.getWidth();
+	}
+
+	/**
+	 * gibt die Hoehe des Actors zurueck
+	 * 
+	 * @return
+	 */
+	public int getHeight() {
+		return ani.getHeight();
+	}
+
+	/**
+	 * zeichnet den Actor
+	 * 
+	 * @param gl
+	 */
+	public void draw(SpriteBatch batch) {
+		ani.draw(batch);
+	}
+
+	/**
+	 * updatet den aktuellen State des Actors
+	 * 
+	 * @param fsm
+	 *            FiniteStateMachine
+	 * @param time
+	 *            GameTime
+	 * @param cont
+	 *            Context
+	 */
+	public void update(FiniteStateMachine fsm, IGameEngine engine) {
+		curState.update(this, fsm);
+	}
+
+}

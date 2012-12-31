@@ -1,0 +1,72 @@
+package de.jawi.game.GameScreen;
+
+import de.jawi.engine.FiniteStateMachine.Actor;
+import de.jawi.engine.FiniteStateMachine.Button;
+import de.jawi.engine.FiniteStateMachine.FiniteStateMachine;
+import de.jawi.engine.mustacheengine.game.sprite.SpriteBatch;
+import de.jawi.engine.mustacheengine.game.texture.GameScreenTextures;
+import de.jawi.engine.mustacheengine.gamescreen.GameScreen;
+import de.jawi.engine.mustacheengine.gamescreen.GameScreenManager;
+import de.jawi.engine.mustacheengine.input.InputManager;
+import de.jawi.game.states.InitState;
+import de.nw90.jawi.R;
+
+public class PauseGameScreen extends GameScreen {
+
+	private FiniteStateMachine oldFSM;
+	private Button btn;
+
+	/**
+	 * 
+	 * @param gsm
+	 *            GSM
+	 * @param lm
+	 *            LayerManager des zu Grunde liegenden GS (wird nur gezeichnet,
+	 *            nicht geupdatet)
+	 */
+	public PauseGameScreen(GameScreenManager gsm, FiniteStateMachine fsm) {
+		super(gsm);
+		oldFSM = fsm;
+	}
+
+	@Override
+	public void onPrepareGameScreen() {
+
+		btn = new Button("Back", getEngine().getFont("standard"), 2, 1,
+				getEngine().getGameBitmapFromPool(R.drawable.rahmen));
+
+		getFSM().addActor(
+				new Actor(InitState.instance(), 1, getEngine()
+						.getGameBitmapFromPool(R.drawable.pause_bg)));
+
+		addButton(btn);
+	}
+
+	@Override
+	public void update() {
+		getFSM().update(getEngine());
+	}
+
+	@Override
+	public void draw(SpriteBatch batch) {
+		oldFSM.draw(batch);
+		getFSM().draw(batch);
+	}
+
+	@Override
+	public void inputProcessed(InputManager inputManager) {
+		if (inputManager.getState(btn).justPressed()) {
+			getEngine().playSound("btnClick");
+			getGSM().pop();
+		}
+	}
+
+	@Override
+	public GameScreenTextures onLoadTextures() {
+		GameScreenTextures t = new GameScreenTextures();
+		t.addTexture(R.drawable.pause_bg);
+		// rahmen wird in LayerTestScreen geladen
+		return t;
+	}
+
+}
